@@ -1,0 +1,247 @@
+<html><head><base href="/" />
+<link href="https://fonts.googleapis.com/css2?family=Cyberpunk:wght@400;700&family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #00ff66;
+    border-radius: 5px;
+  }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00ff66;
+    background: #0a0a0a;
+    overflow-x: hidden;
+  }
+
+  section {
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .canvas-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+  }
+
+  h1, h2 {
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px #00ff66;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cyber-grid {
+    background: 
+      linear-gradient(90deg, rgba(0,255,102,0.1) 1px, transparent 1px),
+      linear-gradient(rgba(0,255,102,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translateZ(0); }
+    100% { transform: translate3d(-50px, -50px, 0); }
+  }
+
+  .project-card {
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #00ff66;
+    padding: 2rem;
+    margin: 1rem;
+    border-radius: 10px;
+    transition: transform 0.3s;
+    backdrop-filter: blur(5px);
+  }
+
+  .project-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00ff66;
+  }
+
+  footer {
+    background: #000;
+    padding: 2rem;
+    text-align: center;
+    border-top: 2px solid #00ff66;
+  }
+
+  .social-links a {
+    color: #00ff66;
+    text-decoration: none;
+    margin: 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s;
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    .project-card { margin: 1rem 0; }
+  }
+</style>
+</head>
+<body>
+  <canvas class="matrix-rain" id="matrixRain"></canvas>
+
+  <section id="home">
+    <div class="cyber-grid"></div>
+    <div class="content reveal">
+      <h1>TAWFIK</h1>
+      <h2>Cyber Security Specialist</h2>
+    </div>
+  </section>
+
+  <section id="projects">
+    <canvas class="canvas-background" id="particleCanvas"></canvas>
+    <div class="content reveal">
+      <h2>Projects</h2>
+      <div class="project-card">
+        <h3>Security Analysis</h3>
+        <p>Advanced penetration testing and vulnerability assessment</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <canvas class="canvas-background" id="networkCanvas"></canvas>
+    <div class="content reveal">
+      <h2>Contact</h2>
+      <div class="project-card">
+        <h3>Get In Touch</h3>
+        <p>Let's discuss your cybersecurity needs</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://github.com">GitHub</a>
+      <a href="https://linkedin.com">LinkedIn</a>
+    </div>
+    <p>© 2024 Tawfik - Cybersecurity Portfolio</p>
+  </footer>
+
+<script>
+// Matrix Rain Animation
+const matrixCanvas = document.getElementById('matrixRain');
+const ctx = matrixCanvas.getContext('2d');
+
+matrixCanvas.width = window.innerWidth;
+matrixCanvas.height = window.innerHeight;
+
+const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+const fontSize = 14;
+const columns = matrixCanvas.width/fontSize;
+const drops = [];
+
+for(let x = 0; x < columns; x++) {
+    drops[x] = 1;
+}
+
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    
+    ctx.fillStyle = '#0F0';
+    ctx.font = fontSize + 'px monospace';
+
+    for(let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+        
+        if(drops[i]*fontSize > matrixCanvas.height && Math.random() > 0.975)
+            drops[i] = 0;
+        
+        drops[i]++;
+    }
+}
+
+// Scroll Reveal
+function reveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    
+    reveals.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+            element.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', reveal);
+window.addEventListener('resize', () => {
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+});
+
+setInterval(drawMatrix, 50);
+reveal();
+</script>
+</body></html>
